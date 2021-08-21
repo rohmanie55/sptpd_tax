@@ -16,7 +16,22 @@ Auth::routes(['register' => false, 'reset' => false]);
 
 Route::group(['middleware' => 'auth'], function()
 {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', 'DashboardController')->name('dashboard');
+
+    Route::resource('user', 'UserController');
+
+    Route::resource('company', 'CompanyController');
+
+    Route::resource('room', 'RoomController');
+
+    Route::resource('f&b', 'RoomController');
+
+    Route::resource('trx_room', 'TrxRoomController');
+
+    Route::resource('trx_f&b', 'TrxFabController');
+
+    Route::resource('trx_rev', 'TrxFabController');
+
+    Route::resource('trx_sptpd', 'TrxFabController');
+
 });
