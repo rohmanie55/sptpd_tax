@@ -23,6 +23,14 @@
     <!-- Custom styles for this page -->
     <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .select2-container {
+            width: 100% !important;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -72,14 +80,7 @@
             <li class="nav-item {{ is_active('trx_room.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('trx_room.index') }}">
                     <i class="fas fa-fw fa-book"></i>
-                    <span>Transaksi Ruangan</span></a>
-            </li>
-
-            
-            <li class="nav-item {{ is_active('trx_f&b.index') ? 'active' : ''}}">
-                <a class="nav-link" href="{{ route('trx_f&b.index') }}">
-                    <i class="fas fa-fw fa-coffee"></i>
-                    <span>Transaksi F&B</span></a>
+                    <span>Transaksi</span></a>
             </li>
 
             <li class="nav-item {{ is_active('trx_rev.index') ? 'active' : ''}}">
@@ -254,6 +255,8 @@
     <!-- Page level plugins -->
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @yield('script')
 

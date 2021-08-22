@@ -20,13 +20,15 @@ Route::group(['middleware' => 'auth'], function()
 
     Route::resource('user', 'UserController')->except(['create', 'show', 'edit']);
 
-    Route::resource('company', 'CompanyController');
+    Route::resource('company', 'CompanyController')->except(['create', 'show', 'edit']);
 
-    Route::resource('room', 'RoomController');
+    Route::resource('room', 'RoomController')->except(['create', 'show', 'edit']);
 
-    Route::resource('f&b', 'RoomController');
+    Route::resource('guest', 'GuestController')->except(['create', 'show', 'edit']);
 
-    Route::resource('trx_room', 'TrxRoomController');
+    Route::resource('f&b', 'FaBController')->except(['create', 'show', 'edit']);
+
+    Route::resource('trx_room', 'TrxRoomController')->except(['create', 'show', 'edit']);
 
     Route::resource('trx_f&b', 'TrxFabController');
 

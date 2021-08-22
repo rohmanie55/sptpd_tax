@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Companie;
+use App\Models\Guest;
 
-class CompanyController extends Controller
+class GuestController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('company',[
-            'companies' => Companie::get(),
+        return view('guest',[
+            'guests' => Guest::get(),
         ]);
     }
 
@@ -29,11 +29,13 @@ class CompanyController extends Controller
     {
         $request->validate([
             'nama' => 'required|max:191',
+            'tipeID' => 'required|max:20',
+            'nomorID' => 'required|max:50',
         ]);
 
-        Companie::create($request->except('_token'));
+        Guest::create($request->except('_token'));
 
-        return redirect()->route('company.index')->with('message', 'Success creating company!');
+        return redirect()->route('guest.index')->with('message', 'Success creating guest!');
     }
 
         /**
@@ -47,11 +49,13 @@ class CompanyController extends Controller
     {
         $request->validate([
             'nama' => 'required|max:191',
+            'tipeID' => 'required|max:20',
+            'nomorID' => 'required|max:50',
         ]);
 
-        Companie::find($id)->update($request->except('_token'));
+        Guest::find($id)->update($request->except('_token'));
 
-        return redirect()->route('company.index')->with('message', 'Success creating company!');
+        return redirect()->route('guest.index')->with('message', 'Success creating guest!');
     }
 
         /**
@@ -63,12 +67,11 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         try {
-            Companie::findOrFail($id)->delete();
+            Guest::findOrFail($id)->delete();
 
-            return redirect()->route('company.index')->with('success', 'Successfull deleting company!');
+            return redirect()->route('guest.index')->with('success', 'Successfull deleting guest!');
        } catch (\Throwable $th) {
-            return redirect()->route('company.index')->with('fail', 'Failed deleting company!');
+            return redirect()->route('guest.index')->with('fail', 'Failed deleting guest!');
        }
     }
-
 }
