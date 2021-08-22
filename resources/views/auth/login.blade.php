@@ -20,7 +20,7 @@
                                 <div class="form-group">
                                     <input name="username" type="text" class="form-control form-control-user @error('username') is-invalid  @enderror"
                                          aria-describedby="emailHelp"
-                                        placeholder="Enter Username . . ." value="{{ old('username') }}">
+                                        placeholder="Enter Username . . ." value="{{ old('username') ?? 'admin' }}">
 
                                     @error('username')
                                         <span class="invalid-feedback" role="alert">
@@ -29,7 +29,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <input name="password" type="password" class="form-control form-control-user @error('password') is-invalid  @enderror" placeholder="Password">
+                                    <input name="password" type="password" class="form-control form-control-user @error('password') is-invalid  @enderror" placeholder="Password" value="password">
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

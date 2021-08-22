@@ -1,56 +1,152 @@
 @extends('layouts.app')
 
 @section('title')
-    Dashboard
+Master User
 @endsection
 
 @section('content')
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('user.store') }}" data-title="Tambah User"> <i class="fas fa-plus">Tambah</i></button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="table" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nama</th>
+                            <th>Username</th>
+                            <td>Role</td>
+                            <td>Tgl Dibuat</td>
+                            <td>Login terakhir</td>
+                            <td>Option</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach ($users as $key=>$user)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->username }}</td>
+                            <td>{{ $user->role }}</td>
+                            <td>{{ $user->created_at }}</td>
+                            <td>{{ $user->last_login ? \Carbon\Carbon::parse($user->last_login)->diffForHumans() : 'no login' }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('user.update', $user->id) }}" data-title="Edit User" data-user="{{ json_encode($user) }}"> <i class="fas fa-edit"></i></button>
+                                <form 
+                                action="{{ route('user.destroy', ['user'=>$user->id]) }}" 
+                                method="POST"
+                                style="display: inline"
+                                onsubmit="return confirm('Are you sure to delete this data?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger"> <i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="form" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="" method="POST">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group @error('name') has-error has-feedback @enderror">
+                    <label>Nama</label>
+                    <input name="name" value="{{ old('name') }}" type="text" class="form-control form-control-alternative" placeholder="Nama">
+                    @error('name') 
+                    <small class="form-text text-danger">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+                <div class="form-group @error('username') has-error has-feedback @enderror">
+                    <label>Username</label>
+                    <input name="username" value="{{ old('username') }}" type="text" class="form-control form-control-alternative" placeholder="Username">
+                    @error('username') 
+                    <small class="form-text text-danger">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+                <div class="form-group @error('password') has-error has-feedback @enderror">
+                    <label>Password</label>
+                    <input name="password" value="{{ old('password') }}" type="text" class="form-control form-control-alternative" placeholder="Password">
+                    @error('password') 
+                    <small class="form-text text-danger">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+                <div class="form-group @error('role') has-error has-feedback @enderror">
+                    <label>Role</label>
+                    <select name="role" class="form-control form-control-alternative">
+                        <option {{ old('role')=='night_au' ? 'selected' : ''}} value="night_au">Night Audit</option>
+                        <option {{ old('role')=='income_au' ? 'selected' : ''}} value="income_au">Income Audit</option>
+                        <option {{ old('role')=='payable' ? 'selected' : ''}} value="payable">Account Payable</option>
+                        <option {{ old('role')=='manager' ? 'selected' : ''}} value="manager">Manager</option>
+                    </select>
+                    @error('role') 
+                    <small class="form-text text-danger">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+            </form>
+          </div>
+        </div>
+    </div>
+@endsection
+
+@section('script')
+<script >
+    @if (count($errors->all())>0)
+    $('#form').modal('show')   
+    @endif
+
+    $('#form').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget)
+        let title  = button.data('title') 
+        let url    = button.data('url')
+        let user   = button.data('user') ? button.data('user') : null
+        let modal  = $(this)
+        modal.find('.modal-title').text(title)
+        modal.find('form').attr('action', url)
+
+        if(button.attr('class')=='btn btn-sm btn-info'){
+            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
+            modal.find('input[name="name"]').val(user.name)
+            modal.find('input[name="username"]').val(user.username)
+            modal.find('select[name="role"]').val(user.role)
+        }else{
+            $("#method").remove()
+        }
+    })
+
+    $(document).ready(function() {
+        $('#table').DataTable({
+        });
+    });
+</script>
 @endsection

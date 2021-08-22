@@ -18,7 +18,7 @@ Route::group(['middleware' => 'auth'], function()
 {
     Route::get('/', 'DashboardController')->name('dashboard');
 
-    Route::resource('user', 'UserController');
+    Route::resource('user', 'UserController')->except(['create', 'show', 'edit']);
 
     Route::resource('company', 'CompanyController');
 

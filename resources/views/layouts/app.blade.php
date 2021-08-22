@@ -44,46 +44,52 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
+            @php
+                function is_active($route){
+                    return Route::currentRouteName()==$route;
+                }
+            @endphp
+
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item {{ is_active('dashboard') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item {{ is_active('user.index') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('user.index') }}">
                     <i class="fas fa-fw fa-user"></i>
                     <span>Master User</span></a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item {{ is_active('room.index') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('room.index') }}">
                     <i class="fas fa-fw fa-building"></i>
                     <span>Master Ruangan</span></a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item {{ is_active('trx_room.index') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('trx_room.index') }}">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Transaksi Ruangan</span></a>
             </li>
 
             
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item {{ is_active('trx_f&b.index') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('trx_f&b.index') }}">
                     <i class="fas fa-fw fa-coffee"></i>
                     <span>Transaksi F&B</span></a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item {{ is_active('trx_rev.index') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('trx_rev.index') }}">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>Pendapatan Harian</span></a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item {{ is_active('trx_sptpd.index') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('trx_sptpd.index') }}">
                     <i class="fas fa-fw fa-money-check-alt"></i>
                     <span>Pajak SPTPD</span></a>
             </li>
@@ -128,6 +134,7 @@
                             </div>
                         </div>
                     </form> --}}
+                    <h4> @yield('title')</h4>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -186,6 +193,25 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    @if(session()->has('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span class="alert-icon"><i class="ni ni-check-bold"></i></span>
+                        <span class="alert-text">{{ session()->get('success') }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @endif
+                    @if(session()->has('fail'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span class="alert-icon"><i class="ni ni-fat-remove"></i></span>
+                            <span class="alert-text"> {{ session()->get('fail') }}</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                    
                     @yield('content')
                 </div>
                 <!-- /.container-fluid -->
@@ -214,26 +240,6 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('vendor/jquery/jquery.min.js')}}"></script>
@@ -248,6 +254,8 @@
     <!-- Page level plugins -->
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    @yield('script')
 
 </body>
 
