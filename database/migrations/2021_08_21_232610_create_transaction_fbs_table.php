@@ -16,6 +16,8 @@ class CreateTransactionFbsTable extends Migration
         Schema::create('transaction_fbs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamp('tgl_trx');
+            $table->integer('qty');
+            $table->double('total');
             $table->unsignedBigInteger('trx_id');
             $table->unsignedBigInteger('fab_id');
             $table->foreign('trx_id')->references('id')->on('transactions')->onDelete('restrict');

@@ -20,7 +20,6 @@ class CreateTransactionsTable extends Migration
             $table->integer('jml_hari');
             $table->double('diskon')->nullable();
             $table->double('subtotal');
-            $table->double('total');
             $table->unsignedBigInteger('room_id');
             $table->unsignedBigInteger('company_id');
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('restrict');

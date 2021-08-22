@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth'], function()
 
     Route::resource('trx_room', 'TrxRoomController')->except(['create', 'show', 'edit']);
 
-    Route::resource('trx_fab', 'TrxFabController');
+    Route::resource('trx_fab', 'TrxFabController')->except(['index', 'create', 'show', 'edit']);
 
     Route::resource('trx_rev', 'TrxFabController');
 

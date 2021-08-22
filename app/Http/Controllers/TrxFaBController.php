@@ -3,28 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\TransactionFb;
+use App\Models\FoodBaverage;
+use App\Models\Transaction;
+use DB;
 
 class TrxFaBController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -34,29 +20,19 @@ class TrxFaBController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'tgl_trx' => 'required',
+            'fab_id' => 'required',
+            'qty' => 'required',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $fab = FoodBaverage::find($request->fab_id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $request['total'] = $request->qty * $fab->harga;
+
+        TransactionFb::create($request->except('_token'));
+
+        return redirect()->route('trx_room.index')->with('message', 'Success creating transaction f&b!');
     }
 
     /**
@@ -68,7 +44,19 @@ class TrxFaBController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'tgl_trx' => 'required',
+            'fab_id' => 'required',
+            'qty' => 'required',
+        ]);
+
+        $fab = FoodBaverage::find($request->fab_id);
+
+        $request['total'] = $request->qty * $fab->harga;
+
+        TransactionFb::find($id)->update($request->except('_token'));
+
+        return redirect()->route('trx_room.index')->with('message', 'Success updating transaction f&b!');
     }
 
     /**
@@ -79,6 +67,12 @@ class TrxFaBController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            TransactionFb::findOrFail($id)->delete();
+
+            return redirect()->route('trx_room.index')->with('success', 'Successfull deleting transaction f&b!');
+       } catch (\Throwable $th) {
+            return redirect()->route('trx_room.index')->with('fail', 'Failed deleting transaction f&b!');
+       }
     }
 }

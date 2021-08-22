@@ -17,12 +17,6 @@ Daftar Perusahaan
                           Transaksi</a>
                       </li>
                       <li class="nav-item">
-                          <a class="nav-link" href="{{ route('trx_fab.index') }}">
-                              <i class="fas fa-fw fa-coffee"></i>
-                              <span>Transaksi F&B</span>
-                          </a>
-                      </li>
-                      <li class="nav-item">
                         <a class="nav-link active" href="{{ route('company.index') }}">
                           <i class="fas fa-fw fa-list"></i>
                           Daftar Perusahaan</a>

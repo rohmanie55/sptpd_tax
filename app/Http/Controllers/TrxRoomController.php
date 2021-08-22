@@ -8,6 +8,7 @@ use App\Models\Room;
 use App\Models\Companie;
 use App\Models\Guest;
 use App\Models\TrxGuest;
+use App\Models\FoodBaverage;
 use Carbon\Carbon;
 use DB;
 
@@ -21,10 +22,11 @@ class TrxRoomController extends Controller
     public function index()
     {
         return view('transaction',[
-            'transactions' => Transaction::with('guests.guest', 'company:id,nama', 'room:id,no_ruangan,nama,tipe')->get(),
+            'transactions' => Transaction::with('guests.guest', 'company:id,nama', 'room:id,no_ruangan,nama,tipe', 'fabs.fab:id,nama,tipe,harga')->get(),
             'rooms' => Room::select('id', 'nama', 'tipe', 'no_ruangan')->get(),
             'companies'=> Companie::select('id', 'nama')->get(),
             'guests'=> Guest::select('id', 'nama', 'nomorID', 'tipeID')->get(),
+            'foods'=> FoodBaverage::get(),
         ]);
     }
 
@@ -52,7 +54,6 @@ class TrxRoomController extends Controller
                 //hitung total dan subtotal
                 $request['jml_hari'] = $hari;
                 $request['subtotal'] = $room->harga*$hari;
-                $request['total'] = $request['subtotal'] - ($request['subtotal'] * $request->diskon / 100);
                 
                 $trx = Transaction::create($request->except('_token', 'guest'));
                 $trxs   = [];
@@ -97,7 +98,6 @@ class TrxRoomController extends Controller
                 //hitung total dan subtotal
                 $request['jml_hari'] = $hari;
                 $request['subtotal'] = $room->harga*$hari;
-                $request['total'] = $request['subtotal'] - ($request['subtotal'] * $request->diskon / 100);
 
                 TrxGuest::where('trx_id', $id)->delete();
 

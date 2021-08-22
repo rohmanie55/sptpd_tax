@@ -17,6 +17,14 @@ class Transaction extends Model
     }
 
     /**
+     * Get all of the f&b transactions.
+     */
+    public function fabs()
+    {
+        return $this->hasMany(TransactionFb::class,'trx_id', 'id');
+    }
+
+    /**
      * Get room associated with the transaction.
      */
     public function room()
