@@ -18,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->timestamp('arrival_at');
             $table->timestamp('departure_at');
             $table->integer('jml_hari');
-            $table->double('diskon')->default(0);
+            $table->double('diskon')->nullable();
             $table->double('subtotal');
             $table->unsignedBigInteger('guest_id');
             $table->unsignedBigInteger('room_id');
