@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Master User
+Master Ruangan
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@ Master User
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('user.store') }}" data-title="Tambah User"> <i class="fas fa-plus">Tambah</i></button>
+            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('room.store') }}" data-title="Tambah User"> <i class="fas fa-plus">Tambah</i></button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -17,28 +17,28 @@ Master User
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>No Ruangan</th>
                             <th>Nama</th>
-                            <th>Username</th>
-                            <th>Role</th>
-                            <th>Tgl Dibuat</th>
-                            <th>Login terakhir</th>
+                            <th>Tipe</th>
+                            <th>Harga</th>
+                            <th>Fasilitas</th>
                             <th>Option</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach ($users as $key=>$user)
+                        @foreach ($rooms as $key=>$room)
                         <tr>
                             <td>{{ $key+1 }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->username }}</td>
-                            <td>{{ $user->role }}</td>
-                            <td>{{ $user->created_at }}</td>
-                            <td>{{ $user->last_login ? \Carbon\Carbon::parse($user->last_login)->diffForHumans() : 'no login' }}</td>
+                            <td>{{ $room->no_ruangan }}</td>
+                            <td>{{ $room->nama }}</td>
+                            <td>{{ $room->tipe }}</td>
+                            <td>{{ $room->harga }}</td>
+                            <td>{{ $room->fasilitas }}</td>
                             <td>
-                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('user.update', $user->id) }}" data-title="Edit User" data-user="{{ json_encode($user) }}"> <i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('room.update', $room->id) }}" data-title="Edit User" data-room="{{ json_encode($room) }}"> <i class="fas fa-edit"></i></button>
                                 <form 
-                                action="{{ route('user.destroy', ['user'=>$user->id]) }}" 
+                                action="{{ route('room.destroy', ['room'=>$room->id]) }}" 
                                 method="POST"
                                 style="display: inline"
                                 onsubmit="return confirm('Are you sure to delete this data?')">
@@ -67,42 +67,46 @@ Master User
             <form action="" method="POST">
             @csrf
             <div class="modal-body">
-                <div class="form-group @error('name') has-error has-feedback @enderror">
+                <div class="form-group @error('no_ruangan') has-error has-feedback @enderror">
+                    <label>No Ruangan</label>
+                    <input name="no_ruangan" value="{{ old('no_ruangan') }}" type="number" class="form-control " placeholder="Nomor Ruangan">
+                    @error('no_ruangan') 
+                    <small class="form-text text-danger">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+                <div class="form-group @error('nama') has-error has-feedback @enderror">
                     <label>Nama</label>
-                    <input name="name" value="{{ old('name') }}" type="text" class="form-control " placeholder="Nama">
-                    @error('name') 
+                    <input name="nama" value="{{ old('nama') }}" type="text" class="form-control " placeholder="Nama">
+                    @error('nama') 
                     <small class="form-text text-danger">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('username') has-error has-feedback @enderror">
-                    <label>Username</label>
-                    <input name="username" value="{{ old('username') }}" type="text" class="form-control " placeholder="Username">
-                    @error('username') 
+                <div class="form-group @error('tipe') has-error has-feedback @enderror">
+                    <label>Tipe</label>
+                    <input name="tipe" value="{{ old('tipe') }}" type="text" class="form-control " placeholder="Tipe">
+                    @error('tipe') 
                     <small class="form-text text-danger">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('password') has-error has-feedback @enderror">
-                    <label>Password</label>
-                    <input name="password" value="{{ old('password') }}" type="text" class="form-control " placeholder="Password">
-                    @error('password') 
+                <div class="form-group @error('harga') has-error has-feedback @enderror">
+                    <label>Harga</label>
+                    <input name="harga" value="{{ old('harga') }}" type="text" class="form-control " placeholder="Harga">
+                    @error('harga') 
                     <small class="form-text text-danger">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('role') has-error has-feedback @enderror">
-                    <label>Role</label>
-                    <select name="role" class="form-control ">
-                        <option {{ old('role')=='night_au' ? 'selected' : ''}} value="night_au">Night Audit</option>
-                        <option {{ old('role')=='income_au' ? 'selected' : ''}} value="income_au">Income Audit</option>
-                        <option {{ old('role')=='payable' ? 'selected' : ''}} value="payable">Account Payable</option>
-                        <option {{ old('role')=='manager' ? 'selected' : ''}} value="manager">Manager</option>
-                    </select>
-                    @error('role') 
+                <div class="form-group @error('fasilitas') has-error has-feedback @enderror">
+                    <label>Fasilitas</label>
+                    <textarea name="fasilitas" class="form-control"></textarea>
+                    @error('fasilitas') 
                     <small class="form-text text-danger">
                         <strong>{{ $message }}</strong>
                     </small> 
@@ -129,16 +133,18 @@ Master User
         let button = $(event.relatedTarget)
         let title  = button.data('title') 
         let url    = button.data('url')
-        let user   = button.data('user') ? button.data('user') : null
+        let room   = button.data('room') ? button.data('room') : null
         let modal  = $(this)
         modal.find('.modal-title').text(title)
         modal.find('form').attr('action', url)
 
         if(button.attr('class')=='btn btn-sm btn-info'){
             modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
-            modal.find('input[name="name"]').val(user.name)
-            modal.find('input[name="username"]').val(user.username)
-            modal.find('select[name="role"]').val(user.role)
+            modal.find('input[name="no_ruangan"]').val(room.no_ruangan)
+            modal.find('input[name="nama"]').val(room.nama)
+            modal.find('input[name="tipe"]').val(room.tipe)
+            modal.find('input[name="harga"]').val(room.harga)
+            modal.find('textarea[name="fasilitas"]').val(room.fasilitas)
         }else{
             $("#method").remove()
         }

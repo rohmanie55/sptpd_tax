@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Room;
 
 class RoomController extends Controller
 {
@@ -13,18 +14,11 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        return view('room',[
+            'rooms' => Room::get(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -34,29 +28,16 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'no_ruangan' => 'required|max:100|unique:rooms',
+            'nama' => 'required|max:255',
+            'tipe' => 'required|max:50',
+            'harga' => 'required',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        Room::create($request->except('_token'));
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return redirect()->route('room.index')->with('message', 'Success creating room!');
     }
 
     /**
@@ -68,7 +49,16 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'no_ruangan' => 'required|max:100|unique:rooms,no_ruangan,'.$id,
+            'nama' => 'required|max:255',
+            'tipe' => 'required|max:50',
+            'harga' => 'required',
+        ]);
+
+        Room::find($id)->update($request->except('_token'));
+
+        return redirect()->route('room.index')->with('message', 'Success creating room!');
     }
 
     /**
@@ -79,6 +69,12 @@ class RoomController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Room::findOrFail($id)->delete();
+
+            return redirect()->route('room.index')->with('success', 'Successfull deleting room!');
+       } catch (\Throwable $th) {
+            return redirect()->route('room.index')->with('fail', 'Failed deleting room!');
+       }
     }
 }

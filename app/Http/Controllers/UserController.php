@@ -36,7 +36,7 @@ class UserController extends Controller
         //hasing
         $request['password'] = bcrypt($request->password);
 
-        User::create($request->except('token'));
+        User::create($request->except('_token'));
 
         return redirect()->route('user.index')->with('message', 'Success creating user!');
     }
@@ -61,7 +61,7 @@ class UserController extends Controller
         else
             unset($request['password']);
 
-        User::find($id)->update($request->except('token'));
+        User::find($id)->update($request->except('_token'));
 
         return redirect()->route('user.index')->with('success', 'Successfull update user!');
     }
