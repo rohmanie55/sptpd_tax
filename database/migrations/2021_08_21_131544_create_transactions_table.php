@@ -15,8 +15,8 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamp('arrival_at');
-            $table->timestamp('departure_at');
+            $table->timestamp('arrival_at')->nullable();
+            $table->timestamp('departure_at')->nullable();
             $table->integer('jml_hari');
             $table->double('diskon')->nullable();
             $table->double('subtotal');
