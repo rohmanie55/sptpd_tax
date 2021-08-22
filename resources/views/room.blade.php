@@ -9,7 +9,7 @@ Master Ruangan
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('room.store') }}" data-title="Tambah User"> <i class="fas fa-plus">Tambah</i></button>
+            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('room.store') }}" data-title="Tambah Ruangan"> <i class="fas fa-plus">Tambah</i></button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -36,7 +36,7 @@ Master Ruangan
                             <td>{{ $room->harga }}</td>
                             <td>{{ $room->fasilitas }}</td>
                             <td>
-                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('room.update', $room->id) }}" data-title="Edit User" data-room="{{ json_encode($room) }}"> <i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('room.update', $room->id) }}" data-title="Edit Ruangan" data-room="{{ json_encode($room) }}"> <i class="fas fa-edit"></i></button>
                                 <form 
                                 action="{{ route('room.destroy', ['room'=>$room->id]) }}" 
                                 method="POST"
@@ -67,47 +67,47 @@ Master Ruangan
             <form action="" method="POST">
             @csrf
             <div class="modal-body">
-                <div class="form-group @error('no_ruangan') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>No Ruangan</label>
-                    <input name="no_ruangan" value="{{ old('no_ruangan') }}" type="number" class="form-control " placeholder="Nomor Ruangan">
+                    <input name="no_ruangan" value="{{ old('no_ruangan') }}" type="number" class="form-control @error('no_ruangan') is-invalid @enderror" placeholder="Nomor Ruangan">
                     @error('no_ruangan') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('nama') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Nama</label>
-                    <input name="nama" value="{{ old('nama') }}" type="text" class="form-control " placeholder="Nama">
+                    <input name="nama" value="{{ old('nama') }}" type="text" class="form-control  @error('nama') is-invalid @enderror" placeholder="Nama">
                     @error('nama') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('tipe') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Tipe</label>
-                    <input name="tipe" value="{{ old('tipe') }}" type="text" class="form-control " placeholder="Tipe">
+                    <input name="tipe" value="{{ old('tipe') }}" type="text" class="form-control  @error('tipe') is-invalid @enderror" placeholder="Tipe">
                     @error('tipe') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('harga') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Harga</label>
-                    <input name="harga" value="{{ old('harga') }}" type="text" class="form-control " placeholder="Harga">
+                    <input name="harga" value="{{ old('harga') }}" type="text" class="form-control @error('harga') is-invalid @enderror" placeholder="Harga">
                     @error('harga') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('fasilitas') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Fasilitas</label>
-                    <textarea name="fasilitas" class="form-control"></textarea>
+                    <textarea name="fasilitas" class="form-control @error('fasilitas') is-invalid @enderror"></textarea>
                     @error('fasilitas') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
@@ -146,7 +146,7 @@ Master Ruangan
             modal.find('input[name="harga"]').val(room.harga)
             modal.find('textarea[name="fasilitas"]').val(room.fasilitas)
         }else{
-            $("#method").remove()
+            $("input[name='_method']").remove()
         }
     })
 

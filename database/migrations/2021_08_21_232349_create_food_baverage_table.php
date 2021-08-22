@@ -16,6 +16,7 @@ class CreateFoodBaverageTable extends Migration
         Schema::create('food_baverages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama');
+            $table->enum('tipe', ['food', 'baverage'])->default('food');
             $table->double('harga');
             $table->string('deskripsi');
             $table->timestamps();

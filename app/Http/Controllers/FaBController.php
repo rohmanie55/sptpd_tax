@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\FoodBaverage;
 
 class FaBController extends Controller
 {
@@ -13,17 +14,9 @@ class FaBController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('food',[
+            'fabs' => FoodBaverage::get(),
+        ]);
     }
 
     /**
@@ -34,29 +27,15 @@ class FaBController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'nama' => 'required|max:191',
+            'tipe' => 'required|max:50',
+            'harga' => 'required',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        FoodBaverage::create($request->except('_token'));
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return redirect()->route('fab.index')->with('message', 'Success creating f&b!');
     }
 
     /**
@@ -68,7 +47,15 @@ class FaBController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama' => 'required|max:191',
+            'tipe' => 'required|max:50',
+            'harga' => 'required',
+        ]);
+
+        FoodBaverage::find($id)->update($request->except('_token'));
+
+        return redirect()->route('fab.index')->with('message', 'Success creating f&b!');
     }
 
     /**
@@ -79,6 +66,12 @@ class FaBController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            FoodBaverage::findOrFail($id)->delete();
+
+            return redirect()->route('fab.index')->with('success', 'Successfull deleting f&b!');
+       } catch (\Throwable $th) {
+            return redirect()->route('fab.index')->with('fail', 'Failed deleting f&b!');
+       }
     }
 }

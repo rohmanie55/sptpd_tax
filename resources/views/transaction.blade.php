@@ -17,7 +17,7 @@ Transaksi
                         Transaksi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('trx_f&b.index') }}">
+                        <a class="nav-link" href="{{ route('trx_fab.index') }}">
                             <i class="fas fa-fw fa-coffee"></i>
                             <span>Transaksi F&B</span>
                         </a>
@@ -102,66 +102,66 @@ Transaksi
             <form action="" method="POST">
             @csrf
             <div class="modal-body">
-                <div class="form-group @error('arrival_at') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Tgl Datang</label>
-                    <input name="arrival_at" value="{{ old('arrival_at') }}" type="datetime-local" class="form-control " placeholder="Tgl Datang">
+                    <input name="arrival_at" value="{{ old('arrival_at') }}" type="datetime-local" class="form-control @error('arrival_at') is-invalid @enderror" placeholder="Tgl Datang">
                     @error('arrival_at') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
-                <div class="form-group @error('departure_at') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Tgl Pulang</label>
-                    <input name="departure_at" value="{{ old('departure_at') }}" type="datetime-local" class="form-control " placeholder="Tgl Pulang">
+                    <input name="departure_at" value="{{ old('departure_at') }}" type="datetime-local" class="form-control @error('departure_at') is-invalid @enderror" placeholder="Tgl Pulang">
                     @error('departure_at') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
 
-                <div class="form-group @error('diskon') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Diskon</label>
-                    <input name="diskon" value="{{ old('diskon') }}" type="number" class="form-control " placeholder="Diskon %">
+                    <input name="diskon" value="{{ old('diskon') }}" type="number" class="form-control @error('diskon') is-invalid @enderror" placeholder="Diskon %">
                     @error('diskon') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
 
-                <div class="form-group @error('room_id') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Kamar</label>
-                    <select name="room_id" class="form-control select2">
+                    <select name="room_id" class="form-control select2 @error('room_id') is-invalid @enderror">
                         @foreach ($rooms as $room)
                         <option {{ old('room_id')==$room->id ? 'selected' : ''}} value="{{ $room->id }}">{{ $room->no_ruangan }} - {{ $room->nama }} ({{ $room->tipe }})</option>
                         @endforeach
                     </select>
                     @error('room_id') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
 
-                <div class="form-group @error('company_id') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <div>
                         <label>Asal Perusahaan</label>
                     </div>
-                    <select name="company_id" class="form-control select2">
+                    <select name="company_id" class="form-control select2 @error('company_id') is-invalid @enderror">
                         @foreach ($companies as $company)
                         <option {{ old('company_id')==$company->id ? 'selected' : ''}} value="{{ $company->id }}">{{ $company->nama }}</option>
                         @endforeach
                     </select>
                     @error('company_id') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
 
-                <div class="form-group @error('guest') has-error has-feedback @enderror">
+                <div class="form-group @error('guest') is-invalid @enderror">
                     <div>
                         <label>Tamu</label>
                     </div>
@@ -171,7 +171,7 @@ Transaksi
                         @endforeach
                     </select>
                     @error('guest') 
-                    <small class="form-text text-danger">
+                    <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
@@ -213,7 +213,7 @@ Transaksi
             modal.find('select[name="company_id"]').val(trx_room.company_id)
             modal.find('select[name="guest[]"]').val(trx_guest).change()
         }else{
-            $("#method").remove()
+            $("input[name='_method']").remove()
         }
     })
 

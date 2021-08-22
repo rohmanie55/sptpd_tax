@@ -77,6 +77,12 @@
                     <span>Master Ruangan</span></a>
             </li>
 
+            <li class="nav-item {{ is_active('fab.index') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('fab.index') }}">
+                    <i class="fas fa-fw fa-coffee"></i>
+                    <span>Master F & B</span></a>
+            </li>
+
             <li class="nav-item {{ is_active('trx_room.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('trx_room.index') }}">
                     <i class="fas fa-fw fa-book"></i>
@@ -126,7 +132,7 @@
                     {{-- <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                            <input type="text" class="form-control form-control-user bg-light border-0 small" placeholder="Search for..."
                                 aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
@@ -151,7 +157,7 @@
                                 aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
+                                        <input type="text" class="form-control form-control-user bg-light border-0 small"
                                             placeholder="Search for..." aria-label="Search"
                                             aria-describedby="basic-addon2">
                                         <div class="input-group-append">

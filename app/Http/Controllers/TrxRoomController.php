@@ -89,7 +89,7 @@ class TrxRoomController extends Controller
             'guest' => 'required',
         ]);
 
-        // try {
+        try {
             DB::transaction(function () use($request, $id) {
                 $hari = Carbon::parse($request->departure_at)->diff(Carbon::parse($request->arrival_at))->days;
                 $room = Room::find($request->room_id);
@@ -112,9 +112,9 @@ class TrxRoomController extends Controller
             });
 
             return redirect()->route('trx_room.index')->with('message', 'Success update transaksi!');
-        // } catch (\Throwable $th) {
-        //     return redirect()->route('trx_room.index')->with('fail', 'Failed update transaksi!');
-        // }
+        } catch (\Throwable $th) {
+            return redirect()->route('trx_room.index')->with('fail', 'Failed update transaksi!');
+        }
     }
 
     /**

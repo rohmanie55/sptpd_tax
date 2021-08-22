@@ -17,7 +17,7 @@ Daftar Perusahaan
                           Transaksi</a>
                       </li>
                       <li class="nav-item">
-                          <a class="nav-link" href="{{ route('trx_f&b.index') }}">
+                          <a class="nav-link" href="{{ route('trx_fab.index') }}">
                               <i class="fas fa-fw fa-coffee"></i>
                               <span>Transaksi F&B</span>
                           </a>
@@ -86,11 +86,11 @@ Daftar Perusahaan
             <form action="" method="POST">
             @csrf
             <div class="modal-body">
-                <div class="form-group @error('nama') has-error has-feedback @enderror">
+                <div class="form-group ">
                     <label>Nama</label>
-                    <input name="nama" value="{{ old('nama') }}" type="text" class="form-control " placeholder="Nama">
+                    <input name="nama" value="{{ old('nama') }}" type="text" class="form-control  @error('nama') is-invalid @enderror" placeholder="Nama">
                     @error('nama') 
-                    <small class="form-text text-danger">
+                    <small class="invalid-feedback">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
@@ -125,7 +125,7 @@ Daftar Perusahaan
             modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
             modal.find('input[name="nama"]').val(company.nama)
         }else{
-            $("#method").remove()
+            $("input[name='_method']").remove()
         }
     })
 

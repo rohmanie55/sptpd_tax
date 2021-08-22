@@ -26,11 +26,11 @@ Route::group(['middleware' => 'auth'], function()
 
     Route::resource('guest', 'GuestController')->except(['create', 'show', 'edit']);
 
-    Route::resource('f&b', 'FaBController')->except(['create', 'show', 'edit']);
+    Route::resource('fab', 'FaBController')->except(['create', 'show', 'edit']);
 
     Route::resource('trx_room', 'TrxRoomController')->except(['create', 'show', 'edit']);
 
-    Route::resource('trx_f&b', 'TrxFabController');
+    Route::resource('trx_fab', 'TrxFabController');
 
     Route::resource('trx_rev', 'TrxFabController');
 
