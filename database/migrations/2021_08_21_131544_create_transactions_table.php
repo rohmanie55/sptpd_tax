@@ -24,7 +24,6 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('room_id');
             $table->unsignedBigInteger('company_id');
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('restrict');
-            $table->foreign('guest_id')->references('id')->on('trx_guests')->onDelete('restrict');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('restrict');
             $table->timestamps();
         });
