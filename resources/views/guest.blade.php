@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Daftar Perusahaan
+Daftar Tamu
 @endsection
 
 @section('content')

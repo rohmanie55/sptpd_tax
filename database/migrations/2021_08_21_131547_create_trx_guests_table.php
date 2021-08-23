@@ -16,7 +16,7 @@ class CreateTrxGuestsTable extends Migration
         Schema::create('trx_guests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('trx_id');
-            $table->foreign('trx_id')->references('id')->on('transactions')->onDelete('restrict');
+            $table->foreign('trx_id')->references('id')->on('transactions')->onDelete('cascade');
             $table->unsignedBigInteger('guest_id');
             $table->foreign('guest_id')->references('id')->on('guests')->onDelete('restrict');
             $table->timestamps();

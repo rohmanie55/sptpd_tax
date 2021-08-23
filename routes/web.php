@@ -32,8 +32,8 @@ Route::group(['middleware' => 'auth'], function()
 
     Route::resource('trx_fab', 'TrxFabController')->except(['index', 'create', 'show', 'edit']);
 
-    Route::resource('trx_rev', 'TrxFabController');
+    Route::resource('trx_sptpd', 'TaxSPTPDController');
 
-    Route::resource('trx_sptpd', 'TrxFabController');
+    Route::get('trx_rev', 'TrxRoomController@revenue')->name('trx_rev.index');
 
 });

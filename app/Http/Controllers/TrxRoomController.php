@@ -32,6 +32,32 @@ class TrxRoomController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function revenue()
+    {
+        $transaction = Transaction::selectRaw("
+        MIN(arrival_at) as min_date, 
+        MAX(arrival_at) as max_date, 
+        COUNT(id) as trx_count, 
+        COALESCE(SUM(subtotal),0) as room_total, 
+        COALESCE(SUM(subdiskon),0) as diskon, 
+        CONCAT(MONTH(arrival_at),'-',YEAR(arrival_at)) as periode,
+        fab_count,
+        fab_total")
+        ->leftJoin(DB::raw("(SELECT COALESCE(COUNT(id),0) as fab_count, COALESCE(SUM(total),0) as fab_total, trx_id FROM transaction_fbs GROUP BY trx_id) fbs"),
+        'fbs.trx_id', '=', 'transactions.id')
+        ->groupBy('periode')
+        ->get();
+
+        return view('revenue',[
+            'transactions' => $transaction,
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -68,6 +94,7 @@ class TrxRoomController extends Controller
                 //hitung total dan subtotal
                 $request['jml_hari'] = $hari;
                 $request['subtotal'] = $room->harga*$hari;
+                $request['subdiskon']= $request['subtotal']*$request->diskon/100;
                 
                 $trx = Transaction::create($request->except('_token', 'guest'));
                 $trxs   = [];
@@ -123,6 +150,7 @@ class TrxRoomController extends Controller
                 //hitung total dan subtotal
                 $request['jml_hari'] = $hari;
                 $request['subtotal'] = $room->harga*$hari;
+                $request['subdiskon']= $request['subtotal']*$request->diskon/100;
 
                 TrxGuest::where('trx_id', $id)->delete();
 
