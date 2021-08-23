@@ -23,7 +23,7 @@ class TrxRoomController extends Controller
     public function index()
     {
         return view('transaction',[
-            'transactions' => Transaction::with('guests.guest', 'company:id,nama', 'room:id,no_ruangan,nama,tipe', 'fabs.fab:id,nama,tipe,harga')->get(),
+            'transactions' => Transaction::with('guests.guest', 'company:id,nama', 'room:id,no_ruangan,nama,tipe', 'fabs.fab:id,nama,tipe,harga')->orderBy('arrival_at')->get(),
             'rooms' => Room::select('id', 'nama', 'tipe', 'no_ruangan')->get(),
             'companies'=> Companie::select('id', 'nama')->get(),
             'guests'=> Guest::select('id', 'nama', 'nomorID', 'tipeID')->get(),

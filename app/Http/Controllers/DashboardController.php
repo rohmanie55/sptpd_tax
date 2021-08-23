@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Room;
 use App\Models\Guest;
+use App\Models\TrxGuest;
 
 class DashboardController extends Controller
 {
@@ -20,8 +21,12 @@ class DashboardController extends Controller
         //dd($overview);
         return view('dashboard',[
             'month'=> $month,
-            'room' => Room::count(),
-            'guest'=> Guest::count(),
+            'room' =>Room::whereHas('transactions',function($query) use($param){ 
+                $query->whereMonth('arrival_at', $param[1])->whereYear('arrival_at', $param[0]);
+            })->count(),
+            'guest'=> TrxGuest::whereHas('transaction',function($query) use($param){ 
+                $query->whereMonth('arrival_at', $param[1])->whereYear('arrival_at', $param[0]);
+            })->count(),
             'trx'=> Transaction::whereMonth('arrival_at', $param[1])->whereYear('arrival_at', $param[0])->count(),
             'revenue'=>$revenue ,
             'overview'=>$overview,

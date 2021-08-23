@@ -9,7 +9,7 @@ Pajak SPTPD
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('trx_sptpd.store') }}" data-title="Tambah User"> <i class="fas fa-plus">Tambah</i></button>
+            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('trx_sptpd.store') }}" data-title="Tambah SPTPD"> <i class="fas fa-plus">Tambah</i></button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -17,26 +17,52 @@ Pajak SPTPD
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Periode</th>
                             <th>No Billing</th>
                             <th>Total Pembayaran</th>
-                            <th>Role</th>
-                            <th>Tgl Dibuat</th>
-                            <th>Login terakhir</th>
+                            <th>Status</th>
+                            <th>Deskripsi</th>
+                            <th>Input By</th>
+                            <th>Approve</th>
                             <th>Option</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach ($users as $key=>$trx_sptpd)
+                        @foreach ($transactions as $key=>$trx_sptpd)
                         <tr>
                             <td>{{ $key+1 }}</td>
-                            <td>{{ $trx_sptpd->name }}</td>
-                            <td>{{ $trx_sptpd->username }}</td>
-                            <td>{{ $trx_sptpd->role }}</td>
-                            <td>{{ $trx_sptpd->created_at }}</td>
-                            <td>{{ $trx_sptpd->last_login ? \Carbon\Carbon::parse($trx_sptpd->last_login)->diffForHumans() : 'no login' }}</td>
+                            <td>{{ $trx_sptpd->periode }}</td>
+                            <td>{{ $trx_sptpd->no_bill }}</td>
+                            <td>@currency($trx_sptpd->total)</td>
+                            <td>{{ $trx_sptpd->status }}</td>
+                            <td>{{ $trx_sptpd->deskripsi }}</td>
+                            <td>{{ $trx_sptpd->insert->name }}</td>
+                            <td>{{ $trx_sptpd->approve->name ?? "" }}</td>
                             <td>
-                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('trx_sptpd.update', $trx_sptpd->id) }}" data-title="Edit User" data-trx_sptpd="{{ json_encode($trx_sptpd) }}"> <i class="fas fa-edit"></i></button>
+                                @if (!$trx_sptpd->approve_at)
+                                <form 
+                                action="{{ route('trx_sptpd.approve', $trx_sptpd->id) }}" 
+                                method="POST"
+                                style="display: inline"
+                                onsubmit="return confirm('Are you sure to approve this data?')">
+                                    @csrf
+                                    <button class="btn btn-sm btn-success"> <i class="fas fa-thumbs-up"></i></button>
+                                </form>
+                                @endif
+
+                                @if ($trx_sptpd->status=='created' && $trx_sptpd->approve_at)
+                                <form 
+                                action="{{ route('trx_sptpd.status', $trx_sptpd->id) }}" 
+                                method="POST"
+                                style="display: inline"
+                                onsubmit="return confirm('Are you sure set status pay?')">
+                                    @csrf
+                                    <button class="btn btn-sm btn-warning"> <i class="fas fa-check"></i></button>
+                                </form>
+                                @endif
+
+                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('trx_sptpd.update', $trx_sptpd->id) }}" data-title="Edit SPTPD" data-trx_sptpd="{{ json_encode($trx_sptpd) }}"> <i class="fas fa-edit"></i></button>
                                 <form 
                                 action="{{ route('trx_sptpd.destroy', ['trx_sptpd'=>$trx_sptpd->id]) }}" 
                                 method="POST"
@@ -67,47 +93,48 @@ Pajak SPTPD
             <form action="{{ old('_method') ? route('trx_sptpd.update', old('_id')) : route('trx_sptpd.store') }}" method="POST">
             @csrf
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Nama</label>
-                    <input name="name" value="{{ old('name') }}" type="text" class="form-control   @error('name') is-invalid @enderror" placeholder="Nama">
-                    @error('name') 
-                    <small class="invalid-feedback">
-                        <strong>{{ $message }}</strong>
-                    </small> 
-                    @enderror
-                </div>
                 <div class="form-group ">
-                    <label>Username</label>
-                    <input name="username" value="{{ old('username') }}" type="text" class="form-control @error('username') is-invalid @enderror" placeholder="Username">
-                    @error('username') 
-                    <small class="invalid-feedback">
-                        <strong>{{ $message }}</strong>
-                    </small> 
-                    @enderror
-                </div>
-                <div class="form-group ">
-                    <label>Password</label>
-                    <input name="password" value="{{ old('password') }}" type="text" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
-                    @error('password') 
-                    <small class="invalid-feedback">
-                        <strong>{{ $message }}</strong>
-                    </small> 
-                    @enderror
-                </div>
-                <div class="form-group ">
-                    <label>Role</label>
-                    <select name="role" class="form-control @error('role') is-invalid @enderror">
-                        <option {{ old('role')=='night_au' ? 'selected' : ''}} value="night_au">Night Audit</option>
-                        <option {{ old('role')=='income_au' ? 'selected' : ''}} value="income_au">Income Audit</option>
-                        <option {{ old('role')=='payable' ? 'selected' : ''}} value="payable">Account Payable</option>
-                        <option {{ old('role')=='manager' ? 'selected' : ''}} value="manager">Manager</option>
+                    <label>Periode</label>
+                    <select name="periode" class="form-control @error('periode') is-invalid @enderror">
+                        <option value="" readonly>-- Pilih Periode --</option>
+                        @foreach ($periodes as $periode)
+                        <option value="{{ $periode->periode }}" {{ old('periode')==$periode->periode ? 'selected' : ''}}>{{$periode->periode}} - Revenue: @currency($periode->total)</option>
+                        @endforeach
                     </select>
-                    @error('role') 
+                    @error('periode') 
                     <small class="invalid-feedback">
                         <strong>{{ $message }}</strong>
                     </small> 
                     @enderror
                 </div>
+                <div class="form-group">
+                    <label>No Billing</label>
+                    <input name="no_bill" value="{{ old('no_bill') }}" type="text" class="form-control   @error('no_bill') is-invalid @enderror" placeholder="No Billing">
+                    @error('no_bill') 
+                    <small class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Total Bayar (10% Revenue)</label>
+                    <input name="total" value="{{ old('total') }}" type="number" class="form-control   @error('total') is-invalid @enderror" placeholder="Total Bayar">
+                    @error('total') 
+                    <small class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+                <div class="form-group ">
+                    <label>Deskripsi</label>
+                    <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror"></textarea>
+                    @error('deskripsi') 
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </small> 
+                    @enderror
+                </div>
+   
                 @if (old('_id'))
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="_id" value="{{ old('_id') }}">
@@ -129,6 +156,13 @@ Pajak SPTPD
     $('#form').modal('show')   
     @endif
 
+    let periodes = @json($periodes)
+
+    $("#form select[name='periode']").on('change', function() {
+        let periode = periodes.filter(p=>p.periode==$(this).val())
+        $("#form input[name='total']").val(parseInt(periode[0].total*0.1))
+    });
+
     $('#form').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget)
         let title  = button.data('title') 
@@ -140,9 +174,11 @@ Pajak SPTPD
 
         if(button.attr('class')=='btn btn-sm btn-info'){
             modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT"><input type="hidden" name="_id" value="${trx_sptpd.id}">`)
-            modal.find('input[name="name"]').val(trx_sptpd.name)
-            modal.find('input[name="username"]').val(trx_sptpd.username)
-            modal.find('select[name="role"]').val(trx_sptpd.role)
+            modal.find('select[name="periode"]').val(trx_sptpd.periode)
+            modal.find('input[name="no_bill"]').val(trx_sptpd.no_bill)
+            modal.find('input[name="total"]').val(trx_sptpd.total)
+            modal.find('textarea[name="deskripsi"]').val(trx_sptpd.deskripsi)
+
         }else{
             $("#form input[name='_method']").remove()
             $("#form input[name='_id']").remove()
