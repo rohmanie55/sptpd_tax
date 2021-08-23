@@ -64,7 +64,7 @@ Master User
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="" method="POST">
+            <form action="{{ old('_method') ? route('user.update', old('_id')) : route('user.store') }}" method="POST">
             @csrf
             <div class="modal-body">
                 <div class="form-group">
@@ -108,6 +108,10 @@ Master User
                     </small> 
                     @enderror
                 </div>
+                @if (old('_id'))
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="_id" value="{{ old('_id') }}">
+                @endif
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -135,12 +139,13 @@ Master User
         modal.find('form').attr('action', url)
 
         if(button.attr('class')=='btn btn-sm btn-info'){
-            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
+            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT"><input type="hidden" name="_id" value="${user.id}">`)
             modal.find('input[name="name"]').val(user.name)
             modal.find('input[name="username"]').val(user.username)
             modal.find('select[name="role"]').val(user.role)
         }else{
-            $("input[name='_method']").remove()
+            $("#form input[name='_method']").remove()
+            $("#form input[name='_id']").remove()
         }
     })
 

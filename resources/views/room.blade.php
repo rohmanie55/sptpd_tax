@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Master Ruangan
+Master Room
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@ Master Ruangan
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('room.store') }}" data-title="Tambah Ruangan"> <i class="fas fa-plus">Tambah</i></button>
+            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('room.store') }}" data-title="Tambah Room"> <i class="fas fa-plus">Tambah</i></button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -17,7 +17,7 @@ Master Ruangan
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>No Ruangan</th>
+                            <th>No Room</th>
                             <th>Nama</th>
                             <th>Tipe</th>
                             <th>Harga</th>
@@ -33,10 +33,10 @@ Master Ruangan
                             <td>{{ $room->no_ruangan }}</td>
                             <td>{{ $room->nama }}</td>
                             <td>{{ $room->tipe }}</td>
-                            <td>{{ $room->harga }}</td>
+                            <td>@currency($room->harga)</td>
                             <td>{{ $room->fasilitas }}</td>
                             <td>
-                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('room.update', $room->id) }}" data-title="Edit Ruangan" data-room="{{ json_encode($room) }}"> <i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('room.update', $room->id) }}" data-title="Edit Room" data-room="{{ json_encode($room) }}"> <i class="fas fa-edit"></i></button>
                                 <form 
                                 action="{{ route('room.destroy', ['room'=>$room->id]) }}" 
                                 method="POST"
@@ -64,12 +64,12 @@ Master Ruangan
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="" method="POST">
+            <form action="{{ old('_method') ? route('room.update', old('_id')) : route('room.store') }}" method="POST">
             @csrf
             <div class="modal-body">
                 <div class="form-group ">
-                    <label>No Ruangan</label>
-                    <input name="no_ruangan" value="{{ old('no_ruangan') }}" type="number" class="form-control @error('no_ruangan') is-invalid @enderror" placeholder="Nomor Ruangan">
+                    <label>No Room</label>
+                    <input name="no_ruangan" value="{{ old('no_ruangan') }}" type="number" class="form-control @error('no_ruangan') is-invalid @enderror" placeholder="Nomor Room">
                     @error('no_ruangan') 
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -112,6 +112,10 @@ Master Ruangan
                     </small> 
                     @enderror
                 </div>
+                @if (old('_id'))
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="_id" value="{{ old('_id') }}">
+                @endif
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -139,14 +143,15 @@ Master Ruangan
         modal.find('form').attr('action', url)
 
         if(button.attr('class')=='btn btn-sm btn-info'){
-            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
+            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT"><input type="hidden" name="_id" value="${room.id}">`)
             modal.find('input[name="no_ruangan"]').val(room.no_ruangan)
             modal.find('input[name="nama"]').val(room.nama)
             modal.find('input[name="tipe"]').val(room.tipe)
             modal.find('input[name="harga"]').val(room.harga)
             modal.find('textarea[name="fasilitas"]').val(room.fasilitas)
         }else{
-            $("input[name='_method']").remove()
+            $("#form input[name='_method']").remove()
+            $("#form input[name='_id']").remove()
         }
     })
 

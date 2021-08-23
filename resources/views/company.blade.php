@@ -77,7 +77,7 @@ Daftar Perusahaan
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="" method="POST">
+            <form action="{{ old('_method') ? route('company.update', old('_id')) : route('company.store') }}" method="POST">
             @csrf
             <div class="modal-body">
                 <div class="form-group ">
@@ -89,6 +89,10 @@ Daftar Perusahaan
                     </small> 
                     @enderror
                 </div>
+                @if (old('_id'))
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="_id" value="{{ old('_id') }}">
+                @endif
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -116,10 +120,11 @@ Daftar Perusahaan
         modal.find('form').attr('action', url)
 
         if(button.attr('class')=='btn btn-sm btn-info'){
-            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
+            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT"><input type="hidden" name="_id" value="${company.id}">`)
             modal.find('input[name="nama"]').val(company.nama)
         }else{
-            $("input[name='_method']").remove()
+            $("#form input[name='_method']").remove()
+            $("#form input[name='_id']").remove()
         }
     })
 

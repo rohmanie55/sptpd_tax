@@ -5,7 +5,6 @@ Transaksi
 @endsection
 
 @section('content')
-
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex">
@@ -45,7 +44,7 @@ Transaksi
                             <th>Tamu</th>
                             <th>Kamar</th>
                             <th>Asal Perusahaan</th>
-                            <th class="none">Detail F&B</th>
+                            {{-- <th class="none">Detail F&B</th> --}}
                             <th style="width: 13%">Option</th>
                         </tr>
                     </thead>
@@ -71,7 +70,7 @@ Transaksi
                             </td>
                             <td>{{ $trx_room->room->no_ruangan }} - {{ $trx_room->room->nama }} ({{ $trx_room->room->tipe }})</td>
                             <td>{{ $trx_room->company->nama }}</td>
-                            <td>
+                            {{-- <td>
                                 <div>
                                 <table class="table table-bordered" style="width: 100%">
                                     <tr>
@@ -103,9 +102,9 @@ Transaksi
                                     @endforeach
                                 </table>
                                 </div>
-                            </td>
+                            </td> --}}
                             <td>
-                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#form-fab" data-url="{{ route('trx_fab.store', ['trx_id'=>$trx_room->id]) }}" data-title="Tambah Transaksi F&B"> <i class="fas fa-plus"></i></button>
+                                {{-- <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#form-fab" data-url="{{ route('trx_fab.store', ['trx_id'=>$trx_room->id]) }}" data-title="Tambah Transaksi F&B"> <i class="fas fa-plus"></i></button> --}}
 
                                 <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#form" data-url="{{ route('trx_room.update', $trx_room->id) }}" data-title="Edit Transaksi" data-trx_room="{{ json_encode($trx_room) }}" data-trx_guest="{{ json_encode($trx_room->guests->pluck('guest_id')) }}"> <i class="fas fa-edit"></i></button>
                                 <form 
@@ -135,7 +134,7 @@ Transaksi
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="" method="POST">
+            <form action="{{ old('_method') ? route('trx_room.update', old('_id')) : route('trx_room.store') }}" method="POST">
             @csrf
             <div class="modal-body">
                 <div class="form-group ">
@@ -168,7 +167,7 @@ Transaksi
                 </div>
 
                 <div class="form-group ">
-                    <label>Ruangan</label>
+                    <label>Room</label>
                     <select name="room_id" class="form-control select2 @error('room_id') is-invalid @enderror">
                         @foreach ($rooms as $room)
                         <option {{ old('room_id')==$room->id ? 'selected' : ''}} value="{{ $room->id }}">{{ $room->no_ruangan }} - {{ $room->nama }} ({{ $room->tipe }})</option>
@@ -203,7 +202,7 @@ Transaksi
                     </div>
                     <select name="guest[]" class="form-control select2" multiple="multiple">
                         @foreach ($guests as $guest)
-                        <option {{ old('guest')==$guest->id ? 'selected' : ''}} value="{{ $guest->id }}">{{ $guest->nama }} ({{ $guest->tipeID }}: {{ $guest->nomorID }})</option>
+                        <option {{ old('guest') && in_array($guest->id, old('guest')) ? 'selected' : ''}} value="{{ $guest->id }}">{{ $guest->nama }} ({{ $guest->tipeID }}: {{ $guest->nomorID }})</option>
                         @endforeach
                     </select>
                     @error('guest') 
@@ -212,6 +211,11 @@ Transaksi
                     </small> 
                     @enderror
                 </div>
+
+                @if (old('_id'))
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="_id" value="{{ old('_id') }}">
+                @endif
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -291,21 +295,27 @@ Transaksi
         let url    = button.data('url')
         let trx_room   = button.data('trx_room') ? button.data('trx_room') : null
         let trx_guest  = button.data('trx_guest') ? button.data('trx_guest') : null
+
         let modal  = $(this)
         modal.find('.modal-title').text(title)
         modal.find('form').attr('action', url)
 
         if(button.attr('class')=='btn btn-sm btn-info'){
-            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
-
-            modal.find('input[name="arrival_at"]').val(new Date(trx_room.arrival_at).toJSON().slice(0,19))
-            modal.find('input[name="departure_at"]').val(new Date(trx_room.departure_at).toJSON().slice(0,19))
+            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT"><input type="hidden" name="_id" value="${trx_room.id}">`)
+            let arrival    = new Date(trx_room.arrival_at)
+            let departure  = new Date(trx_room.departure_at)
+            arrival.setMinutes(arrival.getMinutes() - arrival.getTimezoneOffset());
+            departure.setMinutes(departure.getMinutes() - departure.getTimezoneOffset());
+            
+            modal.find('input[name="arrival_at"]').val(arrival.toISOString().slice(0,16))
+            modal.find('input[name="departure_at"]').val(departure.toISOString().slice(0,16))
             modal.find('input[name="diskon"]').val(trx_room.diskon)
             modal.find('select[name="room_id"]').val(trx_room.room_id)
             modal.find('select[name="company_id"]').val(trx_room.company_id)
             modal.find('select[name="guest[]"]').val(trx_guest).change()
         }else{
             $("#form input[name='_method']").remove()
+            $("#form input[name='_id']").remove()
         }
     })
 

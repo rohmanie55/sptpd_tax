@@ -55,6 +55,9 @@
 
             @php
                 function is_active($route){
+                    if (is_array($route)) {
+                       return in_array(Route::currentRouteName(), $route);
+                    }
                     return Route::currentRouteName()==$route;
                 }
             @endphp
@@ -75,16 +78,16 @@
             <li class="nav-item {{ is_active('room.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('room.index') }}">
                     <i class="fas fa-fw fa-building"></i>
-                    <span>Master Ruangan</span></a>
+                    <span>Master Room</span></a>
             </li>
 
-            <li class="nav-item {{ is_active('fab.index') ? 'active' : ''}}">
+            {{-- <li class="nav-item {{ is_active('fab.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('fab.index') }}">
                     <i class="fas fa-fw fa-coffee"></i>
                     <span>Master F & B</span></a>
-            </li>
+            </li> --}}
 
-            <li class="nav-item {{ is_active('trx_room.index') ? 'active' : ''}}">
+            <li class="nav-item {{ is_active(['trx_room.index', 'company.index', 'guest.index']) ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('trx_room.index') }}">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Transaksi</span></a>
@@ -93,7 +96,7 @@
             <li class="nav-item {{ is_active('trx_rev.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('trx_rev.index') }}">
                     <i class="fas fa-fw fa-calendar"></i>
-                    <span>Pendapatan Harian</span></a>
+                    <span>Revenue</span></a>
             </li>
 
             <li class="nav-item {{ is_active('trx_sptpd.index') ? 'active' : ''}}">

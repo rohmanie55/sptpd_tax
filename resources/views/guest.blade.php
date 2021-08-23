@@ -81,7 +81,7 @@ Daftar Perusahaan
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="" method="POST">
+            <form action="{{ old('_method') ? route('guest.update', old('_id')) : route('guest.store') }}" method="POST">
             @csrf
             <div class="modal-body">
                 <div class="form-group ">
@@ -111,6 +111,10 @@ Daftar Perusahaan
                     </small> 
                     @enderror
                 </div>
+                @if (old('_id'))
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="_id" value="{{ old('_id') }}">
+                @endif
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -138,12 +142,13 @@ Daftar Perusahaan
         modal.find('form').attr('action', url)
 
         if(button.attr('class')=='btn btn-sm btn-info'){
-            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT" id="method">`)
+            modal.find('.modal-body').append(`<input type="hidden" name="_method" value="PUT"><input type="hidden" name="_id" value="${guest.id}">`)
             modal.find('input[name="nama"]').val(guest.nama)
             modal.find('input[name="tipeID"]').val(guest.tipeID)
             modal.find('input[name="nomorID"]').val(guest.nomorID)
         }else{
-            $("input[name='_method']").remove()
+            $("#form input[name='_method']").remove()
+            $("#form input[name='_id']").remove()
         }
     })
 

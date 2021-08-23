@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use App\Models\Transaction;
 use App\Models\Room;
 use App\Models\Companie;
@@ -46,10 +47,23 @@ class TrxRoomController extends Controller
             'guest' => 'required',
         ]);
 
+        $room= Room::withCount(['transactions'=> function($query) use($request){
+            $query->whereBetween("arrival_at", $request->only('arrival_at', 'departure_at'));
+        }])->find($request->room_id);
+
+        $hari = Carbon::parse($request->departure_at)->diff(Carbon::parse($request->arrival_at))->days;
+
+        if($room->transactions_count>0){
+            throw ValidationException::withMessages(['room_id' => 'room is not available']);
+        }
+
+        if($hari<=0){
+            throw ValidationException::withMessages(['departure_at' => 'cant less than 1 day']);
+        }
+        
         try {
-            DB::transaction(function () use($request) {
+            DB::transaction(function () use($request, $room) {
                 $hari = Carbon::parse($request->departure_at)->diff(Carbon::parse($request->arrival_at))->days;
-                $room= Room::find($request->room_id);
 
                 //hitung total dan subtotal
                 $request['jml_hari'] = $hari;
@@ -90,18 +104,29 @@ class TrxRoomController extends Controller
             'guest' => 'required',
         ]);
 
-        try {
-            DB::transaction(function () use($request, $id) {
-                $hari = Carbon::parse($request->departure_at)->diff(Carbon::parse($request->arrival_at))->days;
-                $room = Room::find($request->room_id);
+        $room= Room::withCount(['transactions'=> function($query) use($request, $id){
+            $query->where('id', '!=', $id)->whereBetween("arrival_at", $request->only('arrival_at', 'departure_at'));
+        }])->find($request->room_id);
 
+        $hari = Carbon::parse($request->departure_at)->diff(Carbon::parse($request->arrival_at))->days;
+
+        if($room->transactions_count>0){
+            throw ValidationException::withMessages(['room_id' => 'room is not available']);
+        }
+
+        if($hari<=0){
+            throw ValidationException::withMessages(['departure_at' => 'can not less than 1 day']);
+        }
+
+        try {
+            DB::transaction(function () use($request, $id, $room, $hari) {
                 //hitung total dan subtotal
                 $request['jml_hari'] = $hari;
                 $request['subtotal'] = $room->harga*$hari;
 
                 TrxGuest::where('trx_id', $id)->delete();
 
-                Transaction::find($id)->update($request->except('_token', 'guest'));
+                Transaction::find($id)->update($request->except('_token', 'guest', '_method', '_id'));
                 $trxs   = [];
 
                 foreach($request->guest as $guest_id){
