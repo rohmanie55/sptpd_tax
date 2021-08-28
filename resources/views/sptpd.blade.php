@@ -9,7 +9,16 @@ Pajak SPTPD
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('trx_sptpd.store') }}" data-title="Tambah SPTPD"> <i class="fas fa-plus">Tambah</i></button>
+            <button class="btn btn-sm btn-primary float-right mt-1 ml-1" data-toggle="modal" data-target="#form" data-url="{{ route('trx_sptpd.store') }}" data-title="Tambah SPTPD"> <i class="fas fa-plus">Tambah</i></button>
+            <form action="" class="form-inline float-right" style="display: inline">
+                <select name="year" class="form-control" style="width:150px">
+                    @for ($i = 2019; $i <= date('Y'); $i++)
+                    <option {{ $i==$year ? "selected" : ""}}>{{ $i }}</option>
+                    @endfor
+                </select>
+                <button class="btn btn-sm btn-danger" name="print"> <i class="fas fa-file-pdf"></i></button>
+                <button class="btn btn-sm btn-secondary"> <i class="fas fa-search"></i></button>
+            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive">

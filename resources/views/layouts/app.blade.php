@@ -105,6 +105,20 @@
                     <span>Pajak SPTPD</span></a>
             </li>
 
+            {{-- <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#report"
+                    aria-expanded="true" aria-controls="report">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Laporan</span>
+                </a>
+                <div id="report" class="collapse" aria-labelledby="headingTwo">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="buttons.html">Laporan Transaksi</a>
+                        <a class="collapse-item" href="cards.html">Laporan SPTPD</a>
+                    </div>
+                </div>
+            </li> --}}
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 

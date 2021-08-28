@@ -9,6 +9,15 @@ Revenue
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
+            <form action="" class="form-inline float-right" style="display: inline">
+                <select name="year" class="form-control" style="width:150px">
+                    @for ($i = 2019; $i <= date('Y'); $i++)
+                    <option {{ $i==$year ? "selected" : ""}}>{{ $i }}</option>
+                    @endfor
+                </select>
+                <button class="btn btn-sm btn-danger" name="print"> <i class="fas fa-file-pdf"></i></button>
+                <button class="btn btn-sm btn-secondary"> <i class="fas fa-search"></i></button>
+            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive">

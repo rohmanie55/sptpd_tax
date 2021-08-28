@@ -7,8 +7,9 @@ Transaksi
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex">
-            <div class="col-10">
+        <div class="card-header py-3">
+            <div class="row">
+            <div class="col-12 col-lg-7">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
                       <a class="nav-link active" href="{{ route('trx_room.index') }}">
@@ -27,9 +28,15 @@ Transaksi
                     </li>
                   </ul>
             </div>
-            <div class="col-2">
-                <button class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#form" data-url="{{ route('trx_room.store') }}" data-title="Tambah Transaksi"> <i class="fas fa-plus">Tambah</i></button>
+            <div class="col-12 col-lg-5">
+                <form action="" class="form-inline" style="display: inline">
+                    <input type="month" name="month" value="{{ $month }}" class="form-control" style="width:60%">
+                    <button class="btn btn-sm btn-danger" name="print"> <i class="fas fa-file-pdf"></i></button>
+                    <button class="btn btn-sm btn-secondary"> <i class="fas fa-search"></i></button>
+                </form>
+                <button class="btn btn-sm btn-primary mt-1" data-toggle="modal" data-target="#form" data-url="{{ route('trx_room.store') }}" data-title="Tambah Transaksi"> <i class="fas fa-plus">Tambah</i></button>
             </div>
+        </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">

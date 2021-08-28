@@ -11,6 +11,7 @@ use App\Models\Guest;
 use App\Models\TrxGuest;
 use App\Models\FoodBaverage;
 use Carbon\Carbon;
+use PDF;
 use DB;
 
 class TrxRoomController extends Controller
@@ -22,12 +23,26 @@ class TrxRoomController extends Controller
      */
     public function index()
     {
+        $month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
+        $param = explode('-', $month);
+
+        $transactions = Transaction::with('guests.guest', 'company:id,nama', 'room:id,no_ruangan,nama,tipe', 'fabs.fab:id,nama,tipe,harga')->orderBy('arrival_at')
+        ->whereMonth('arrival_at', $param[1])->whereYear('arrival_at', $param[0])
+        ->get();
+
+        if(isset($_GET['print'])){
+            return PDF::loadView('transaction-print', ["transactions"=>$transactions, "param"=>$param])
+            ->setPaper('a4', 'landscape')
+            ->stream("laporan_trx_$param[1]_$param[0].pdf");
+        }
+
         return view('transaction',[
-            'transactions' => Transaction::with('guests.guest', 'company:id,nama', 'room:id,no_ruangan,nama,tipe', 'fabs.fab:id,nama,tipe,harga')->orderBy('arrival_at')->get(),
+            'transactions' => $transactions,
             'rooms' => Room::select('id', 'nama', 'tipe', 'no_ruangan')->get(),
             'companies'=> Companie::select('id', 'nama')->get(),
             'guests'=> Guest::select('id', 'nama', 'nomorID', 'tipeID')->get(),
             'foods'=> FoodBaverage::get(),
+            'month'=> $month
         ]);
     }
 
@@ -38,6 +53,8 @@ class TrxRoomController extends Controller
      */
     public function revenue()
     {
+        $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
+
         $transaction = Transaction::selectRaw("
         MIN(arrival_at) as min_date, 
         MAX(arrival_at) as max_date, 
@@ -49,11 +66,19 @@ class TrxRoomController extends Controller
         fab_total")
         ->leftJoin(DB::raw("(SELECT COALESCE(COUNT(id),0) as fab_count, COALESCE(SUM(total),0) as fab_total, trx_id FROM transaction_fbs GROUP BY trx_id) fbs"),
         'fbs.trx_id', '=', 'transactions.id')
+        ->whereYear('arrival_at', $year)
         ->groupBy('periode')
         ->get();
 
+        if(isset($_GET['print'])){
+            return PDF::loadView('revenue-print', ["transactions"=>$transaction, "year"=>$year])
+            ->setPaper('a4', 'landscape')
+            ->stream("laporan_revenue_$year.pdf");
+        }
+
         return view('revenue',[
             'transactions' => $transaction,
+            'year' => $year
         ]);
     }
 
