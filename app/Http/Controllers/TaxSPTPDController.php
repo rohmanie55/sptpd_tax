@@ -20,7 +20,7 @@ class TaxSPTPDController extends Controller
 
         $transactions = TrxSptpd::with('insert:id,name', 'approve:id,name')
                         ->where('periode', 'LIKE', "%$year%")
-                        ->where('approve_at', '<>', null)
+                        // ->where('approve_at', '<>', null)
                         ->orderBy('created_at')
                         ->get();
 

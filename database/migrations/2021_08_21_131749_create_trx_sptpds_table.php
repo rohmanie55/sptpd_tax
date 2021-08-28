@@ -22,7 +22,7 @@ class CreateTrxSptpdsTable extends Migration
             $table->string('deskripsi')->nullable();
             $table->unsignedBigInteger('create_by');
             $table->foreign('create_by')->references('id')->on('users')->onDelete('restrict');
-            $table->unsignedBigInteger('approve_by');
+            $table->unsignedBigInteger('approve_by')->nullable();
             $table->foreign('approve_by')->references('id')->on('users')->onDelete('restrict');
             $table->timestamps();
         });
