@@ -51,7 +51,7 @@ Pajak SPTPD
                                 </form>
                                 @endif
 
-                                @if ($trx_sptpd->status=='created' && $trx_sptpd->approve_at)
+                                @if ($trx_sptpd->status=='unpaid' && $trx_sptpd->approve_at)
                                 <form 
                                 action="{{ route('trx_sptpd.status', $trx_sptpd->id) }}" 
                                 method="POST"
@@ -85,7 +85,7 @@ Pajak SPTPD
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
+              <h5 class="modal-title">{{ old('_id') ? "Edit" : "Tambah" }} SPTPD</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -141,8 +141,8 @@ Pajak SPTPD
                 @endif
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">{{ old('_id') ? "Update" : "Simpan" }}</button>
             </div>
             </form>
           </div>
@@ -178,10 +178,16 @@ Pajak SPTPD
             modal.find('input[name="no_bill"]').val(trx_sptpd.no_bill)
             modal.find('input[name="total"]').val(trx_sptpd.total)
             modal.find('textarea[name="deskripsi"]').val(trx_sptpd.deskripsi)
-
+            modal.find('.btn-primary').text('Update')
         }else{
             $("#form input[name='_method']").remove()
             $("#form input[name='_id']").remove()
+
+            modal.find('select[name="periode"]').val("")
+            modal.find('input[name="no_bill"]').val("")
+            modal.find('input[name="total"]').val("")
+            modal.find('textarea[name="deskripsi"]').val("")
+            modal.find('.btn-primary').text('Simpan')
         }
     })
 

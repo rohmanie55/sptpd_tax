@@ -59,7 +59,7 @@ Master Room
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
+              <h5 class="modal-title">{{ old('_id') ? "Edit" : "Tambah" }} Room</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -118,8 +118,8 @@ Master Room
                 @endif
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">{{ old('_id') ? "Update" : "Simpan" }}</button>
             </div>
             </form>
           </div>
@@ -149,9 +149,16 @@ Master Room
             modal.find('input[name="tipe"]').val(room.tipe)
             modal.find('input[name="harga"]').val(room.harga)
             modal.find('textarea[name="fasilitas"]').val(room.fasilitas)
+            modal.find('.btn-primary').text('Update')
         }else{
             $("#form input[name='_method']").remove()
             $("#form input[name='_id']").remove()
+            modal.find('input[name="no_ruangan"]').val("")
+            modal.find('input[name="nama"]').val("")
+            modal.find('input[name="tipe"]').val("")
+            modal.find('input[name="harga"]').val("")
+            modal.find('textarea[name="fasilitas"]').val("")
+            modal.find('.btn-primary').text('Simpan')
         }
     })
 

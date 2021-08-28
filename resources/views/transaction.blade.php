@@ -230,7 +230,7 @@ Transaksi
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
+              <h5 class="modal-title">{{ old('_id') ? "Edit" : "Tambah" }} Transaksi</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -275,7 +275,7 @@ Transaksi
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="submit" class="btn btn-primary">{{ old('_id') ? "Update" : "Simpan" }}</button>
             </div>
             </form>
           </div>
@@ -313,9 +313,18 @@ Transaksi
             modal.find('select[name="room_id"]').val(trx_room.room_id)
             modal.find('select[name="company_id"]').val(trx_room.company_id)
             modal.find('select[name="guest[]"]').val(trx_guest).change()
+            modal.find('.btn-primary').text('Update')
         }else{
             $("#form input[name='_method']").remove()
             $("#form input[name='_id']").remove()
+
+            modal.find('input[name="arrival_at"]').val("")
+            modal.find('input[name="departure_at"]').val("")
+            modal.find('input[name="diskon"]').val("")
+            modal.find('select[name="room_id"]').val("")
+            modal.find('select[name="company_id"]').val("")
+            modal.find('select[name="guest[]"]').val([]).change()
+            modal.find('.btn-primary').text('Simpan')
         }
     })
 

@@ -76,7 +76,7 @@ Daftar Tamu
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
+              <h5 class="modal-title">{{ old('_id') ? "Edit" : "Tambah" }} Tamu</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -118,7 +118,7 @@ Daftar Tamu
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="submit" class="btn btn-primary">{{ old('_id') ? "Update" : "Simpan" }}</button>
             </div>
             </form>
           </div>
@@ -146,9 +146,14 @@ Daftar Tamu
             modal.find('input[name="nama"]').val(guest.nama)
             modal.find('input[name="tipeID"]').val(guest.tipeID)
             modal.find('input[name="nomorID"]').val(guest.nomorID)
+            modal.find('.btn-primary').text('Update')
         }else{
             $("#form input[name='_method']").remove()
             $("#form input[name='_id']").remove()
+            modal.find('input[name="nama"]').val("")
+            modal.find('input[name="tipeID"]').val("")
+            modal.find('input[name="nomorID"]').val("")
+            modal.find('.btn-primary').text('Simpan')
         }
     })
 
