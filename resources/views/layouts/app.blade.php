@@ -68,42 +68,49 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-
+            @if (in_array(auth()->user()->role, ['night_au']))
             <li class="nav-item {{ is_active('user.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('user.index') }}">
                     <i class="fas fa-fw fa-user"></i>
                     <span>Master User</span></a>
             </li>
-
+            @endif
+            @if (in_array(auth()->user()->role, ['night_au']))
             <li class="nav-item {{ is_active('room.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('room.index') }}">
                     <i class="fas fa-fw fa-building"></i>
                     <span>Master Room</span></a>
             </li>
+            @endif
 
             {{-- <li class="nav-item {{ is_active('fab.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('fab.index') }}">
                     <i class="fas fa-fw fa-coffee"></i>
                     <span>Master F & B</span></a>
             </li> --}}
-
+            @if (in_array(auth()->user()->role, ['night_au', 'manager']))
             <li class="nav-item {{ is_active(['trx_room.index', 'company.index', 'guest.index']) ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('trx_room.index') }}">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Transaksi</span></a>
             </li>
+            @endif
 
+            @if (in_array(auth()->user()->role, ['night_au', 'income_au', 'manager']))
             <li class="nav-item {{ is_active('trx_rev.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('trx_rev.index') }}">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>Revenue</span></a>
             </li>
+            @endif
 
+            @if (in_array(auth()->user()->role, ['payable', 'manager']))
             <li class="nav-item {{ is_active('trx_sptpd.index') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('trx_sptpd.index') }}">
                     <i class="fas fa-fw fa-money-check-alt"></i>
                     <span>Pajak SPTPD</span></a>
             </li>
+            @endif
 
             {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#report"
