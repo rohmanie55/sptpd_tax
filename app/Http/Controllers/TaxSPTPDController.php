@@ -58,7 +58,7 @@ class TaxSPTPDController extends Controller
      */
     public function status($id)
     {
-        TrxSptpd::find($id)->update(['status'=>'payed']);
+        TrxSptpd::find($id)->update(['status'=>'paid']);
 
         return redirect()->route('trx_sptpd.index')->with('message', 'Success update status sptpd!');
     }
@@ -78,7 +78,7 @@ class TaxSPTPDController extends Controller
         ]);
 
         $request['create_by'] = auth()->user()->id;
-        $request['status'] = 'created';
+        $request['status'] = 'unpaid';
 
         TrxSptpd::create($request->except('_token'));
 
