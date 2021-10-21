@@ -60,7 +60,7 @@ Pajak SPTPD
                                 </form>
                                 @endif
 
-                                @if ($trx_sptpd->status=='unpaid' && $trx_sptpd->approve_at)
+                                @if ($trx_sptpd->status=='unpaid' && $trx_sptpd->approve_at && auth()->user()->role=='payable')
                                 <form 
                                 action="{{ route('trx_sptpd.status', $trx_sptpd->id) }}" 
                                 method="POST"
