@@ -116,9 +116,9 @@ class TaxSPTPDController extends Controller
         try {
             TrxSptpd::findOrFail($id)->delete();
 
-            return redirect()->route('trx_room.index')->with('success', 'Successfull deleting sptpd!');
+            return redirect()->route('trx_sptpd.index')->with('success', 'Successfull deleting sptpd!');
        } catch (\Throwable $th) {
-            return redirect()->route('trx_room.index')->with('fail', 'Failed deleting sptpd!');
+            return redirect()->route('trx_sptpd.index')->with('fail', 'Failed deleting sptpd!');
        }
     }
 }
