@@ -49,7 +49,7 @@ Pajak SPTPD
                             <td>{{ $trx_sptpd->insert->name }}</td>
                             <td>{{ $trx_sptpd->approve->name ?? "" }}</td>
                             <td>
-                                @if (!$trx_sptpd->approve_at && auth()->user()->role='manager')
+                                @if (!$trx_sptpd->approve_at && auth()->user()->role=='manager')
                                 <form 
                                 action="{{ route('trx_sptpd.approve', $trx_sptpd->id) }}" 
                                 method="POST"
